@@ -1,5 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
+import './utils/peer-puppet.js';
 import { ipcRenderer } from 'electron';
 import { useEffect, useState } from 'react';
 

@@ -1,38 +1,21 @@
 const peer = require('./peer-control')
 const {ipcRenderer} = require('electron')
-
-
-ipcRenderer.invoke('get-source-id').then(async sourceId => {
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          audio: false,
-          video: {
-            mandatory: {
-              chromeMediaSource: 'desktop',
-              chromeMediaSourceId: sourceId,
-              maxWidth: window.screen.width,
-              maxHeight: window.screen.height
-            }
-          }
-        })
-        console.log(stream)
-        play(stream)
-      } catch (e) {
-          console.log(e)
-      }
-})
-
-
+const { EVENT_NAMES, IPC_EVENTS_NAME } = require("../../../common/enum");
 let video = document.getElementById('screen-video')
-function play(stream) {
+
+peer.on(EVENT_NAMES.AddStream, (stream) => {
+    console.log("play stream", stream);
+    play(stream);
+});
+
+// 播放视频
+const play = (stream) => {
     video.srcObject = stream
     // onloadedmetadata 事件在指定视频/音频（audio/video）的元数据加载后触发
     video.onloadedmetadata = function() {
         video.play()
     }
 }
-
-
 
 window.onkeydown = function(e) {
     // data {keyCode, meta, alt, ctrl, shift}
@@ -59,5 +42,20 @@ window.onmouseup = function(e) {
         // 元素高度
         height: video.getBoundingClientRect().height
     }
-    peer.emit('robot', 'mouse', data)
+    peer.emit(IPC_EVENTS_NAME.Robot, 'mouse', data)
 }
+
+
+peer.on(IPC_EVENTS_NAME.Robot, (type, data) => {
+    console.log('robot', type, data)
+    if (type === 'mouse') {
+        data.screen = {
+            // 屏幕分辨率
+            width: window.screen.width, 
+            height: window.screen.height
+        }
+    }
+    setTimeout(() => {
+        ipcRenderer.send(IPC_EVENTS_NAME.Robot, type, data)
+    }, 2000);
+})
