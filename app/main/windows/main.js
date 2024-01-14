@@ -1,8 +1,9 @@
-const {BrowserWindow} = require('electron')
+const {BrowserWindow, Menu} = require('electron')
 const isDev = require('electron-is-dev')
 
 let win
 function create () {
+    Menu.setApplicationMenu(null) 
     win = new BrowserWindow({
         width: 600,
         height: 300,

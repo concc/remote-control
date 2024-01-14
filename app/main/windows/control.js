@@ -1,8 +1,9 @@
-const {BrowserWindow} = require('electron')
+const {BrowserWindow, Menu} = require('electron')
 const path = require('path')
 const robot = require('robotjs')
 let win
 function create() {
+    Menu.setApplicationMenu(null) 
     win = new BrowserWindow({
         width: 1000,
         height: 680,

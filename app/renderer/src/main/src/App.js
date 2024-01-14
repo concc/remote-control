@@ -1,4 +1,3 @@
-import logo from './logo.svg';
 import './App.css';
 import './utils/peer-puppet.js';
 import { ipcRenderer } from 'electron';
@@ -44,15 +43,19 @@ export const App = () => {
   }
 
   return (
-    <div className="App">
-      {
-        !controlText?
-        <>
-          <div>你的控制码{localCode}</div>
-          <input type='text' value={remoteCode} onChange={e => setRemoteCode(e.target.value)}></input>
-          <button onClick={() => startControl(remoteCode)}>确认</button>
-        </> : <div>{controlText}</div>
-      }
+    <div className="link-container">
+      <div className="link-container-con">
+        {
+          controlText? <h3 className='state'>{controlText}</h3> :
+          <>
+            <div className="code">你的控制码:<span>{localCode}</span></div>
+            <div className="link">
+              <input type='text' value={remoteCode} onChange={e => setRemoteCode(e.target.value)}></input>
+              <button onClick={() => startControl(remoteCode)}>确认</button>
+            </div>
+          </>
+        }
+      </div>
     </div>
   );
 }
