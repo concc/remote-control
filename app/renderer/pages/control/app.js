@@ -1,6 +1,5 @@
-const peer = require('./peer-control')
-const {ipcRenderer} = require('electron')
-const { EVENT_NAMES, IPC_EVENTS_NAME } = require("../../../common/enum");
+const {peer, dc} = require('./peer-control')
+const { EVENT_NAMES, IPC_EVENTS_NAME, ROBOT_TYPE } = require("../../../common/enum");
 let video = document.getElementById('screen-video')
 
 peer.on(EVENT_NAMES.AddStream, (stream) => {
@@ -26,7 +25,7 @@ window.onkeydown = function(e) {
         control: e.ctrlKey,
         alt: e.altKey
     }
-    peer.emit('robot', 'key', data) 
+    peer.emit(IPC_EVENTS_NAME.Robot, ROBOT_TYPE.Keyboard, data) 
 }
 
 window.onmouseup = function(e) {
@@ -42,13 +41,13 @@ window.onmouseup = function(e) {
         // 元素高度
         height: video.getBoundingClientRect().height
     }
-    peer.emit(IPC_EVENTS_NAME.Robot, 'mouse', data)
+    peer.emit(IPC_EVENTS_NAME.Robot, ROBOT_TYPE.Mouse, data)
 }
 
 
 peer.on(IPC_EVENTS_NAME.Robot, (type, data) => {
     console.log('robot', type, data)
-    if (type === 'mouse') {
+    if (type === ROBOT_TYPE.Mouse) {
         data.screen = {
             // 屏幕分辨率
             width: window.screen.width, 
@@ -56,6 +55,7 @@ peer.on(IPC_EVENTS_NAME.Robot, (type, data) => {
         }
     }
     setTimeout(() => {
-        ipcRenderer.send(IPC_EVENTS_NAME.Robot, type, data)
+        // 发送控制指令
+        dc.send(JSON.stringify({type, data}))
     }, 2000);
 })

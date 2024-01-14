@@ -6,8 +6,21 @@ const { EVENT_NAMES, IPC_EVENTS_NAME, WINDOW_NAME } = require("../../../common/e
 
 // 创建 RTCPeerConnection 实例
 const peerConnection = new window.RTCPeerConnection()
+const dc = peerConnection.createDataChannel('robotchannel', {reliable: false});
 const candidateQueue = []
 
+// datachannel 打开
+dc.onopen = function() {
+    console.log('opened')
+}
+
+// datachannel收到消息
+dc.onmessage = function(event) {
+    console.log('message', event)
+}
+
+// datachannel错误处理
+dc.onerror = (e) => console.log(e)
 
 // 获取icecandidate
 peerConnection.onicecandidate = (e) => {
@@ -82,4 +95,4 @@ createOffer().then(offer => {
 window.addIceCandidate = addIceCandidate;
 window.setRemoteAnswer = setRemoteAnswer;
 
-module.exports = peer;
+module.exports = { peer, dc };

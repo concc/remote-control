@@ -1,6 +1,7 @@
 const {ipcMain} = require('electron')
 const robot = require('robotjs')
 const vkey = require('vkey')
+const { IPC_EVENTS_NAME, ROBOT_TYPE } = require('../common/enum')
 
 function handleMouse(data) {
     let {clientX, clientY, screen, video} = data
@@ -26,11 +27,11 @@ function handleKey(data) {
 }
 
 module.exports = function() {
-    ipcMain.on('robot', (e, type, data) => {
+    ipcMain.on(IPC_EVENTS_NAME.Robot, (e, type, data) => {
         console.log('handle', type, data)
-        if(type === 'mouse') {
+        if(type === ROBOT_TYPE.Mouse) {
             handleMouse(data)
-        } else if(type === 'key') {
+        } else if(type === ROBOT_TYPE.Keyboard) {
             handleKey(data)
         }
     })

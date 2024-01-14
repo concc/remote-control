@@ -5,5 +5,5 @@ const {create: createMainWindow} = require('./windows/main')
 app.on('ready', () => {
     createMainWindow()
     handleIPC()
-    // require('./robot.js')()
+    require('./robot.js')()
 })
