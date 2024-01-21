@@ -34,7 +34,7 @@ npm run start:main
 |    - index.js 主进程
 |    - windows
 |      -- control.js 控制端窗体
-|      -- main.js  傀儡端窗体
+|      -- main.js  被控端窗体
 |    - ipc.js 通信模块
 |    - robot.js 键鼠控制模块
 |  - render
@@ -48,5 +48,5 @@ npm run start:main
 |           -- src
 |              -- utils
 |                 -- enum.js 常量枚举值
-|                 -- peer-puppet.js 傀儡端webRtc逻辑 
+|                 -- peer-puppet.js 被控端webRtc逻辑 
 ```

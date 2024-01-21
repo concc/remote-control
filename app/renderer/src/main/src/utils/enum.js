@@ -2,12 +2,6 @@
  * 枚举值
  */
 
-// window name
-const WINDOW_NAME = {
-    Main: "main",
-    Control:"control"
-}
-
 // ipc event name
 const IPC_EVENTS_NAME = {
     Login: "login",
@@ -37,7 +31,6 @@ const EVENT_NAMES = {
 
 
 module.exports = {
-    WINDOW_NAME,
     IPC_EVENTS_NAME,
     ROBOT_TYPE,
     EVENT_NAMES,

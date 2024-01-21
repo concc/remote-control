@@ -1,8 +1,8 @@
 import { ipcRenderer } from 'electron';
-import { IPC_EVENTS_NAME, WINDOW_NAME, ROBOT_TYPE } from "./enum";
-
+import { IPC_EVENTS_NAME, ROBOT_TYPE } from "./enum";
+const configuration = {iceServers: [{urls: 'stuns:stun.l.google.com:19302'}]};
 // webrtc连接
-const pc = new window.RTCPeerConnection();
+const pc = new window.RTCPeerConnection(configuration);
 
 const candidateQueue = []
 
@@ -33,8 +33,7 @@ pc.onicecandidate = (e) => {
     // 发送给傀儡端
     ipcRenderer.send(
         IPC_EVENTS_NAME.Forward,
-        IPC_EVENTS_NAME.Candidate,
-        WINDOW_NAME.Control,
+        IPC_EVENTS_NAME.CuppetCandidate,
         JSON.stringify(e.candidate)
     );
 }
@@ -98,8 +97,8 @@ ipcRenderer.on(IPC_EVENTS_NAME.Offer, (e, offer) => {
         // 发起ipc通信，由主进程转发到控制端
         ipcRenderer.send(
             IPC_EVENTS_NAME.Forward,
-            IPC_EVENTS_NAME.Answer,
-            WINDOW_NAME.Control, {
+            IPC_EVENTS_NAME.Answer, 
+            {
                 type,
                 sdp,
             }

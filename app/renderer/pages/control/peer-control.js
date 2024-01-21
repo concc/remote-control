@@ -1,11 +1,11 @@
 const EventEmitter = require('events')
 const peer = new EventEmitter()
-const {ipcRenderer, desktopCapturer} = require('electron')
-const { EVENT_NAMES, IPC_EVENTS_NAME, WINDOW_NAME } = require("../../../common/enum");
-
+const {ipcRenderer} = require('electron')
+const { EVENT_NAMES, IPC_EVENTS_NAME } = require("../../../common/enum");
+const configuration = {iceServers: [{urls: 'stuns:stun.l.google.com:19302'}]};
 
 // 创建 RTCPeerConnection 实例
-const peerConnection = new window.RTCPeerConnection()
+const peerConnection = new window.RTCPeerConnection(configuration)
 const dc = peerConnection.createDataChannel('robotchannel', {reliable: false});
 const candidateQueue = []
 
@@ -28,8 +28,7 @@ peerConnection.onicecandidate = (e) => {
     // 发送给傀儡端
     ipcRenderer.send(
         IPC_EVENTS_NAME.Forward,
-        IPC_EVENTS_NAME.Candidate,
-        WINDOW_NAME.Main,
+        IPC_EVENTS_NAME.ControlCandidate,
         JSON.stringify(e.candidate)
     );
 }
@@ -89,7 +88,7 @@ peerConnection.onaddstream = (e) => {
 
 createOffer().then(offer => {
     const { type, sdp } = offer;
-    ipcRenderer.send(IPC_EVENTS_NAME.Forward, IPC_EVENTS_NAME.Offer, WINDOW_NAME.Main, { type, sdp });
+    ipcRenderer.send(IPC_EVENTS_NAME.Forward, IPC_EVENTS_NAME.Offer, { type, sdp });
 });
 
 window.addIceCandidate = addIceCandidate;
