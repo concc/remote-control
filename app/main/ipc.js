@@ -11,10 +11,14 @@ module.exports = function() {
         return code
     })
 
-    ipcMain.on(IPC_EVENTS_NAME.Control, async (e, remoteCode) => {
-        // 这里是跟服务端的交互，成功后我们会唤起面板
+    ipcMain.on(IPC_EVENTS_NAME.Control, async (e, remote) => {
+       // 这里是跟服务端的交互，成功后我们会唤起面板
+       signal.send('control', {remote})
+    })
+
+    signal.on(IPC_EVENTS_NAME.Controlled, (data) => {
         createControlWindow()
-        sendMainWindow('control-state-change', remoteCode, 1)
+        sendMainWindow('control-state-change', data.remote, 1)
     })
 
 

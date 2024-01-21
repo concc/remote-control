@@ -2,7 +2,7 @@ const EventEmitter = require('events')
 const peer = new EventEmitter()
 const {ipcRenderer} = require('electron')
 const { EVENT_NAMES, IPC_EVENTS_NAME } = require("../../../common/enum");
-const configuration = {iceServers: [{urls: 'stuns:stun.l.google.com:19302'}]};
+const configuration = {iceServers: [{urls: 'stun:stun.l.google.com:19302'}]};
 
 // 创建 RTCPeerConnection 实例
 const peerConnection = new window.RTCPeerConnection(configuration)
@@ -34,7 +34,7 @@ peerConnection.onicecandidate = (e) => {
 }
 
 // 监听傀儡端icecandidate，收到之后设置
-ipcRenderer.on(IPC_EVENTS_NAME.Candidate, (e, candidate) => {
+ipcRenderer.on(IPC_EVENTS_NAME.CuppetCandidate, (e, candidate) => {
     addIceCandidate(JSON.parse(candidate));
 });
 

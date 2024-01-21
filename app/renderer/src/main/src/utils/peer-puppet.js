@@ -1,6 +1,6 @@
 import { ipcRenderer } from 'electron';
 import { IPC_EVENTS_NAME, ROBOT_TYPE } from "./enum";
-const configuration = {iceServers: [{urls: 'stuns:stun.l.google.com:19302'}]};
+const configuration = {iceServers: [{urls: 'stun:stun.l.google.com:19302'}]};
 // webrtc连接
 const pc = new window.RTCPeerConnection(configuration);
 
@@ -56,7 +56,7 @@ pc.ondatachannel = (e) => {
 }
 
 // 监听控制端cecandidate，收到之后设置
-ipcRenderer.on(IPC_EVENTS_NAME.Candidate, (e, candidate) => {
+ipcRenderer.on(IPC_EVENTS_NAME.ControlCandidate, (e, candidate) => {
     addIceCandidate(JSON.parse(candidate));
 });
 

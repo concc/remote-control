@@ -54,8 +54,6 @@ peer.on(IPC_EVENTS_NAME.Robot, (type, data) => {
             height: window.screen.height
         }
     }
-    setTimeout(() => {
-        // 发送控制指令
-        dc.send(JSON.stringify({type, data}))
-    }, 2000);
+    // 发送控制指令
+    dc.send(JSON.stringify({type, data}))
 })

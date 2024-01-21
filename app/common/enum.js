@@ -12,6 +12,7 @@ const WINDOW_NAME = {
 const IPC_EVENTS_NAME = {
     Login: "login",
     Control: "control",
+    Controlled: "controlled",
     GetSourceId: 'get-source-id',
     ControlStateChange: "control-state-change",
     AddStream: "add-stream",
