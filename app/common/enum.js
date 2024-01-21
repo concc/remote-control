@@ -13,6 +13,7 @@ const IPC_EVENTS_NAME = {
     Login: "login",
     Control: "control",
     Controlled: "controlled",
+    BeControlled: "be-controlled",
     GetSourceId: 'get-source-id',
     ControlStateChange: "control-state-change",
     AddStream: "add-stream",

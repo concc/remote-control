@@ -7,23 +7,23 @@ const signal = require('./signal')
 
 module.exports = function() {
     ipcMain.handle(IPC_EVENTS_NAME.Login, async () => {
-        const { code } = await signal.invoke('login', null, 'logined')
+        const { code } = await signal.invoke(IPC_EVENTS_NAME.Login, null, 'logined')
         return code
     })
 
     ipcMain.on(IPC_EVENTS_NAME.Control, async (e, remote) => {
        // 这里是跟服务端的交互，成功后我们会唤起面板
-       signal.send('control', {remote})
+       signal.send(IPC_EVENTS_NAME.Control, {remote})
     })
 
     signal.on(IPC_EVENTS_NAME.Controlled, (data) => {
         createControlWindow()
-        sendMainWindow('control-state-change', data.remote, 1)
+        sendMainWindow(IPC_EVENTS_NAME.ControlStateChange, data.remote, 1)
     })
 
 
-    signal.on('be-controlled', (data) => {
-        sendMainWindow('control-state-change', data.remote, 2)
+    signal.on(IPC_EVENTS_NAME.BeControlled, (data) => {
+        sendMainWindow(IPC_EVENTS_NAME.ControlStateChange, data.remote, 2)
     })
 
     // 获取桌面共享id
@@ -31,7 +31,7 @@ module.exports = function() {
         const sources = await desktopCapturer.getSources({ types: ['screen'] });
         console.log(sources)
         for (const source of sources) {
-            if (source.name === 'Screen 1') {
+            if (source.id) {
                 return source.id;
             }
         }
