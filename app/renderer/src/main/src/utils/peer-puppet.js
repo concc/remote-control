@@ -1,5 +1,6 @@
-import { ipcRenderer } from 'electron';
-import { IPC_EVENTS_NAME, ROBOT_TYPE } from "./enum";
+import {ipcRenderer} from 'electron';
+import {IPC_EVENTS_NAME, ROBOT_TYPE} from "./enum";
+
 const configuration = {iceServers: [{urls: 'stun:stun.l.google.com:19302'}]};
 // webrtc连接
 const pc = new window.RTCPeerConnection(configuration);
@@ -10,7 +11,7 @@ const candidateQueue = []
 const getScreenStream = async () =>  {
     const sourceId = await ipcRenderer.invoke(IPC_EVENTS_NAME.GetSourceId)
     try {
-        const stream = await navigator.mediaDevices.getUserMedia({
+        return await navigator.mediaDevices.getUserMedia({
             audio: false,
             video: {
                 mandatory: {
@@ -21,7 +22,6 @@ const getScreenStream = async () =>  {
                 },
             },
         });
-        return stream;
     } catch (e) {
         console.error(e);
     }
@@ -30,10 +30,9 @@ const getScreenStream = async () =>  {
 // 获取candidate
 pc.onicecandidate = (e) => {
     console.log("candidate", JSON.stringify(e.candidate));
-    // 发送给傀儡端
     ipcRenderer.send(
         IPC_EVENTS_NAME.Forward,
-        IPC_EVENTS_NAME.CuppetCandidate,
+        IPC_EVENTS_NAME.PuppetCandidate,
         JSON.stringify(e.candidate)
     );
 }
@@ -55,7 +54,7 @@ pc.ondatachannel = (e) => {
     }
 }
 
-// 监听控制端cecandidate，收到之后设置
+// 监听控制端ice candidate，收到之后设置
 ipcRenderer.on(IPC_EVENTS_NAME.ControlCandidate, (e, candidate) => {
     addIceCandidate(JSON.parse(candidate));
 });
@@ -105,7 +104,3 @@ ipcRenderer.on(IPC_EVENTS_NAME.Offer, (e, offer) => {
         );
     });
 });
-
-
-window.addIceCandidate = addIceCandidate
-window.createAnswer = createAnswer

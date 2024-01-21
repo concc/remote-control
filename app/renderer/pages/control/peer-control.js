@@ -34,7 +34,7 @@ peerConnection.onicecandidate = (e) => {
 }
 
 // 监听傀儡端icecandidate，收到之后设置
-ipcRenderer.on(IPC_EVENTS_NAME.CuppetCandidate, (e, candidate) => {
+ipcRenderer.on(IPC_EVENTS_NAME.PuppetCandidate, (e, candidate) => {
     addIceCandidate(JSON.parse(candidate));
 });
 
@@ -90,8 +90,5 @@ createOffer().then(offer => {
     const { type, sdp } = offer;
     ipcRenderer.send(IPC_EVENTS_NAME.Forward, IPC_EVENTS_NAME.Offer, { type, sdp });
 });
-
-window.addIceCandidate = addIceCandidate;
-window.setRemoteAnswer = setRemoteAnswer;
 
 module.exports = { peer, dc };

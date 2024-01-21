@@ -23,7 +23,7 @@ const IPC_EVENTS_NAME = {
     Forward: "forward",
     Candidate:"candidate",
     ControlCandidate: "control-candidate",
-    CuppetCandidate: "puppet-candidate",
+    PuppetCandidate: "puppet-candidate",
 };
 
 // robot type
