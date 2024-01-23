@@ -35,6 +35,7 @@ window.onmouseup = function(e) {
     data.clientX = e.clientX
     // 鼠标指针位置相对于窗口区域的 y 坐标
     data.clientY = e.clientY
+    data.button = e.button;
     data.video = {
         // 元素宽度
         width: video.getBoundingClientRect().width,
